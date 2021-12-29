@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pass-deployment
+  labels:
+    app: pass-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: pass-deployment
+  template:
+    metadata:
+      labels:
+        app: pass-deployment
+    spec:
+      containers:
+      - name: pass-deploy
+        image: passwordcockpit/passwordcockpit:1.2.2-php-7.3-apache
+        ports:
+        - containerPort: 443
+        env:
+        - name: PASSWORDCOCKPIT_DATABASE_USERNAME 
+          value: "passwordcockpit_db_usr"
+        - name: PASSWORDCOCKPIT_DATABASE_PASSWORD
+          value: "password"
+        - name: PASSWORDCOCKPIT_DATABASE_HOSTNAME 
+          value: "mysql"
+        - name: PASSWORDCOCKPIT_DATABASE_DATABASE
+          value: "passwordcockpit"
+        - name: PASSWORDCOCKPIT_BLOCK_CIPHER_KEY
+          value: "supersecretkey"
+        - name: PASSWORDCOCKPIT_AUTHENTICATION_SECRET_KEY
+          value: "authenticationsecretkey"
+
+        - name: PASSWORDCOCKPIT_BASEHOST
+          value: "https://192.168.49.2:30351" #nodeportu yazdım
+        - name: PASSWORDCOCKPIT_AUTHENTICATION_TYPE
+          value: "password"
+        - name: PASSWORDCOCKPIT_SWAGGER
+          value: "enable"
+        - name: PASSWORDCOCKPIT_SSL 
+          value: "enable"
